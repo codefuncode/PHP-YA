@@ -1,0 +1,27 @@
+En programación el acrónimo CRUD (Create, Read, Update and Delete) se utiliza para hacer referencia a los algoritmos a implementar para permitir crear, leer, modificar y borrar datos de una tabla de una base de datos.
+
+Para los que estamos en el mundo de la programación desde hace muchos años también empleamos como sinónimo de CRUD el acrónimo ABM (Altas, Bajas y Modificaciones)
+
+Hay infinidad de aplicaciones que implementan algoritmos de CRUD de una tabla, por ejemplo si accedemos al programa PhpMyAdmin, seleccionamos una tabla podemos observar la forma que esta aplicación nos permite leer, modificar y borrar registros:
+
+El objetivo de nuestra aplicación será implementar los algoritmos de un CRUD valiéndonos de las siguientes tecnologías:
+
+    PHP (Comunicarse con MySql para recuperar y enviar datos)
+
+    MySql (Almacenamiento de datos)
+
+    HTML (Estructura de la página web donde se muestra la interfaz de nuestro CRUD)
+
+    CSS (Permitir mostrar los datos en forma legible)
+
+    Bootstrap 4 (Librería de CSS que nos facilita implementar la interfaz visual de la aplicación y nos reduce el códico CSS a codificar)
+
+    JavaScript (Interactuar con los datos en el navegador web)
+
+    JQuery (Acceder al DOM del navegador en forma sencilla)
+
+    DataTables (plug-in de jQuery que implementar una interfaz muy rica para interacturar con los datos en el navegador y permite comunicarse con el servidor para recuperar datos)
+
+    AJAX (Nos permitirá comunicarnos con el servidor para la recuperación y envío de datos, evitando tener que refrescar la página web)
+
+    JSON (Será el formato de datos para enviar y recuperar datos de nuestro servidor)

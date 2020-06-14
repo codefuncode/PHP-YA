@@ -1,0 +1,11 @@
+Podemos probar la ejecución de la aplicación de CRUD aquí
+
+Cuando ejecutemos la aplicación debe tener una salida por pantalla similar a esta:
+
+En el diálogo anterior, cuando el usuario termina de cargar los datos y presiona el botón "Agregar", se deben enviar al servidor y almacenar en la base de datos respectiva.
+
+Cuando se presiona alguno de los botones "Modifica?" se debe mostrar la descripción y precio de dicho artículo con el objetivo que el usuario los puede modificar:
+
+Al presionar el botón borrar se debe pedir que el usuario confirme la eliminación del artículo respectivo:
+
+La interfaz visual se adaptará a la librería Bootstrap y las funcionalidades del plug-in DataTables estarán activos por defecto para poder hacer búsquedas, paginación de datos, ordenamiento por columnas etc:

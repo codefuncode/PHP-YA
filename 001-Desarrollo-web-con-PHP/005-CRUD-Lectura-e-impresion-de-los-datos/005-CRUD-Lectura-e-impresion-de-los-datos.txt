@@ -1,0 +1,441 @@
+
+CRUD - Lectura e impresión de los datos
+
+Veremos los algoritmos necesarios para implementar la recuperación e impresión de datos en una tabla HTML (CRUD)
+
+La información se encuentra almacenada en una base de datos de MySQL llamada 'base1'. Crearemos un archivo que recupere la conexión a la base de datos y la retorne:
+conexion.php
+
+<?php
+
+function retornarConexion() {
+    $server="localhost";
+    $usuario="root";
+    $clave="";
+    $base="base1";
+    $con=mysqli_connect($server,$usuario,$clave,$base) or die("problemas") ;
+    mysqli_set_charset($con,'utf8'); 
+    return $con;
+}
+?>
+
+El segundo archivo que interviene en la recuperación de datos del servidor es 'datos.php' y tiene por objetivo retornar un objeto JSON con todos los registros de artículos de la tabla 'articulos':
+datos.php
+
+<?php
+header('Content-Type: application/json');
+
+require("conexion.php");
+
+$conexion = retornarConexion();
+
+switch ($_GET['accion']) {
+    case 'listar':
+        $datos = mysqli_query($conexion, "select codigo,descripcion,precio from articulos");
+        $resultado = mysqli_fetch_all($datos, MYSQLI_ASSOC);
+        echo json_encode($resultado);
+        break;
+
+    case 'agregar':
+        $respuesta = mysqli_query($conexion, "insert into articulos(descripcion,precio) values ('$_POST[descripcion]',$_POST[precio])");
+        echo json_encode($respuesta);
+        break;
+
+    case 'borrar':
+        $respuesta = mysqli_query($conexion, "delete from articulos where codigo=$_GET[codigo]");
+        echo json_encode($respuesta);
+        break;
+
+    case 'consultar':
+        $datos = mysqli_query($conexion, "select codigo,descripcion,precio from articulos where codigo=$_GET[codigo]");
+        $resultado = mysqli_fetch_all($datos, MYSQLI_ASSOC);
+        echo json_encode($resultado);
+        break;
+
+    case 'modificar':
+        $respuesta = mysqli_query($conexion, "update articulos set
+                                                  descripcion='$_POST[descripcion]',
+                                                  precio=$_POST[precio]
+                                               where codigo=$_GET[codigo]");
+        echo json_encode($respuesta);
+        break;
+}
+?>
+
+Podemos probar si realmente nos retorna en formato JSON escribiendo en el navegador este archivo pasando por el método GET la solicitud de 'listar':
+
+CRUD listar JSON
+
+Como podemos comprobar lo primero que indicamos a PHP es que retornará un archivo con formato JSON y no HTML:
+
+header('Content-Type: application/json');
+
+Seguidamente importamos el archivo que contiene la función que se conecta a la base de datos y la llamamos:
+
+require("conexion.php");
+
+$conexion = retornarConexion();
+
+Mediante la sentencia switch verificamos si el parámetro que llega es la cadena 'listar':
+
+switch ($_GET['accion']) {
+    case 'listar':
+        $datos = mysqli_query($conexion, "select codigo,descripcion,precio from articulos");
+        $resultado = mysqli_fetch_all($datos, MYSQLI_ASSOC);
+        echo json_encode($resultado);
+        break;
+
+En caso afirmativo como vemos llamamos a mysqli_query recuperando todas las filas de la tabla artículos y convirtiendo el dato devuelto por la función mysqli_fetch_all a formato JSON mediante la función json_encode.
+El dato retornado por la función json_encode lo volcamos mediante el comando echo.
+
+Ahora veamos el archivo 'index.html' donde mostramos todos los registros de la tabla 'articulos':
+index.html
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crud</title>
+
+  <link href="bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="datatables/datatables.min.css" rel="stylesheet">
+
+  <script src="js/jquery-3.4.1.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="bootstrap-4.3.1/js/bootstrap.min.js"></script>
+  <script src="datatables/datatables.min.js"></script>   
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-striped table-bordered table-hover" id="tablaarticulos">
+          <thead>
+            <tr>
+              <td>Código</td>
+              <td>Descripción</td>
+              <td>Precio</td>
+              <td>Modificar</td>
+              <td>Borrar</td>
+            </tr>
+          </thead>
+        </table>
+        <button class="btn btn-sm btn-primary" id="BotonAgregar">Agregar artículo</button>
+      </div>
+    </div>
+
+    <!-- Formulario (Agregar, Modificar) -->
+
+    <div class="modal fade" id="FormularioArticulo" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="Codigo">
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>Descripción:</label>
+                <input type="text" id="Descripcion" class="form-control" placeholder="">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>Precio:</label>
+                <input type="number" id="Precio" class="form-control" placeholder="">
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="ConfirmarAgregar" class="btn btn-success">Agregar</button>
+              <button type="button" id="ConfirmarModificar" class="btn btn-success">Modificar</button>
+              <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        
+        let tabla1 = $("#tablaarticulos").DataTable({
+          "ajax": {
+            url: "datos.php?accion=listar",
+            dataSrc: ""
+          },
+          "columns": [{
+              "data": "codigo"
+            },
+            {
+              "data": "descripcion"
+            },
+            {
+              "data": "precio"
+            },
+            {
+              "data": null,
+              "orderable": false
+            },
+            {
+              "data": null,
+              "orderable": false
+            }
+          ],
+          "columnDefs": [{
+            targets: 3,
+            "defaultContent": "<button class='btn btn-sm btn-primary botonmodificar'>Modifica?</button>",
+            data: null
+          }, {
+            targets: 4,
+            "defaultContent": "<button class='btn btn-sm btn-primary botonborrar'>Borra?</button>",
+            data: null
+          }],
+          "language": {
+            "url": "DataTables/spanish.json",
+          },
+        });
+
+        //Eventos de botones de la aplicación
+        $('#BotonAgregar').click(function() {
+          $('#ConfirmarAgregar').show();
+          $('#ConfirmarModificar').hide();
+          limpiarFormulario();
+          $("#FormularioArticulo").modal('show');
+        });
+
+        $('#ConfirmarAgregar').click(function() {
+          $("#FormularioArticulo").modal('hide');
+          let registro = recuperarDatosFormulario();
+          agregarRegistro(registro);
+        });
+
+        $('#ConfirmarModificar').click(function() {
+          $("#FormularioArticulo").modal('hide');
+          let registro = recuperarDatosFormulario();
+          modificarRegistro(registro);
+        });
+
+        $('#tablaarticulos tbody').on('click', 'button.botonmodificar', function() {
+          $('#ConfirmarAgregar').hide();
+          $('#ConfirmarModificar').show();
+          let registro = tabla1.row($(this).parents('tr')).data();
+          recuperarRegistro(registro.codigo);
+        });
+
+        $('#tablaarticulos tbody').on('click', 'button.botonborrar', function() {
+          if (confirm("¿Realmente quiere borrar el artículo?")) {
+            let registro = tabla1.row($(this).parents('tr')).data();
+            borrarRegistro(registro.codigo);
+          }
+        });
+
+        // funciones que interactuan con el formulario de entrada de datos
+        function limpiarFormulario() {
+          $('#Codigo').val('');
+          $('#Descripcion').val('');
+          $('#Precio').val('');
+        }
+
+        function recuperarDatosFormulario() {
+          let registro = {
+            codigo: $('#Codigo').val(),
+            descripcion: $('#Descripcion').val(),
+            precio: $('#Precio').val()
+          };
+          return registro;
+        }
+
+
+        // funciones para comunicarse con el servidor via ajax
+        function agregarRegistro(registro) {
+          $.ajax({
+            type: 'POST',
+            url: 'datos.php?accion=agregar',
+            data: registro,
+            success: function(msg) {
+              tabla1.ajax.reload();
+            },
+            error: function() {
+              alert("Hay un problema");
+            }
+          });
+        }
+
+        function borrarRegistro(codigo) {
+          $.ajax({
+            type: 'GET',
+            url: 'datos.php?accion=borrar&codigo=' + codigo,
+            data: '',
+            success: function(msg) {
+              tabla1.ajax.reload();
+            },
+            error: function() {
+              alert("Hay un problema");
+            }
+          });
+        }
+
+        function recuperarRegistro(codigo) {
+          $.ajax({
+            type: 'GET',
+            url: 'datos.php?accion=consultar&codigo=' + codigo,
+            data: '',
+            success: function(datos) {
+              $('#Codigo').val(datos[0].codigo);
+              $('#Descripcion').val(datos[0].descripcion);
+              $('#Precio').val(datos[0].precio);
+              $("#FormularioArticulo").modal('show');
+            },
+            error: function() {
+              alert("Hay un problema");
+            }
+          });
+        }
+
+        function modificarRegistro(registro) {
+          $.ajax({
+            type: 'POST',
+            url: 'datos.php?accion=modificar&codigo=' + registro.codigo,
+            data: registro,
+            success: function(msg) {
+              tabla1.ajax.reload();
+            },
+            error: function() {
+              alert("Hay un problema");
+            }
+          });
+        }
+
+      });
+    </script>
+
+</body>
+
+</html>
+
+    Lo primero que hacemos es importar tanto el archivo js como css del plug-in DataTables (solo recordar que la librería JQuery debe importarse primero):
+
+      <link href="datatables/datatables.min.css" rel="stylesheet">
+
+      <script src="datatables/datatables.min.js"></script>   
+
+    Creamos una tabla HTML donde luego en forma dinámica el plug-in DataTables se encargará de agregar todas sus filas que serán recuperadas del servidor:
+
+              <table class="table table-striped table-bordered table-hover" id="tablaarticulos">
+              <thead>
+                <tr>
+                  <td>Código</td>
+                  <td>Descripción</td>
+                  <td>Precio</td>
+                  <td>Modificar</td>
+                  <td>Borrar</td>
+                </tr>
+              </thead>
+            </table>
+
+    Es importante definir la propiedad id="tablaarticulos", ya que la misma será referenciada desde JavaScript.
+
+    Creamos ahora un objeto de la clase 'DataTables' y le pasamos un objeto iniciando distintas propiedades que configurarán la tabla:
+
+              let tabla1 = $("#tablaarticulos").DataTable({
+              "ajax": {
+                url: "datos.php?accion=listar",
+                dataSrc: ""
+              },
+              "columns": [{
+                  "data": "codigo"
+                },
+                {
+                  "data": "descripcion"
+                },
+                {
+                  "data": "precio"
+                },
+                {
+                  "data": null,
+                  "orderable": false
+                },
+                {
+                  "data": null,
+                  "orderable": false
+                }
+              ],
+              "columnDefs": [{
+                targets: 3,
+                "defaultContent": "<button class='btn btn-sm btn-primary botonmodificar'>Modifica?</button>",
+                data: null
+              }, {
+                targets: 4,
+                "defaultContent": "<button class='btn btn-sm btn-primary botonborrar'>Borra?</button>",
+                data: null
+              }],
+              "language": {
+                "url": "DataTables/spanish.json",
+              },
+            });
+
+    Si ejecutamos la aplicación veremos una salida similar a esta:
+
+    CRUD listar JSON
+
+    Mediante la propiedad "ajax" se le indica que archivo debe llamar para recuperar en formato JSON los datos a mostrar (es lo que probamos anteriormente solicitando al servidor el archivo "datos.php?accion=listar"):
+
+              "ajax": {
+                url: "datos.php?accion=listar",
+                dataSrc: ""
+              },
+
+    En la propiedad "columns" indicamos cada uno de los campos a mostrar y si son columnas donde mostraremos botones inicializamos la propiedad "data" con el valor null:
+
+              "columns": [{
+                  "data": "codigo"
+                },
+                {
+                  "data": "descripcion"
+                },
+                {
+                  "data": "precio"
+                },
+                {
+                  "data": null,
+                  "orderable": false
+                },
+                {
+                  "data": null,
+                  "orderable": false
+                }
+              ],
+
+    Mediante la propiedad "columnDefs" especificamos las columnas que mostrarán los botones de modificar y borrar:
+
+              "columnDefs": [{
+                targets: 3,
+                "defaultContent": "<button class='btn btn-sm btn-primary botonmodificar'>Modifica?</button>",
+                data: null
+              }, {
+                targets: 4,
+                "defaultContent": "<button class='btn btn-sm btn-primary botonborrar'>Borra?</button>",
+                data: null
+              }],
+
+    Por último hemos configurado la propiedad "languaje" para recuperar los textos en castellano que muestra el plug-in DataTables:
+
+              "language": {
+                "url": "DataTables/spanish.json",
+              },
+
+    Disponemos de una gran cantidad de propiedades que podemos configurar cuando creamos un objeto de la clase DataTables, siempre debemos tener a mano la documentación oficial del plug-in DataTables.
+
+Retornar

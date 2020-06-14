@@ -1,0 +1,34 @@
+
+CRUD - Creación de la base de datos y tabla
+
+Debemos tener instalado XAMPP u otro paquete para administrar nuestro servidor web Apache, lenguaje PHP y gestor de bases de datos MySQL.
+
+Utilizaremos el programa PhpMyAdmin para crear la base de datos: 'base1':
+
+Creación de la base de datos con PhpMyAdmin
+
+Seguidamente, luego de seleccionar la base de datos 'base1' procedemos a crear la tabla 'articulos', indicando que tendrá 3 campos:
+
+Creación de una tabla PhpMyAdmin
+
+En forma visual indicamos los nombres y tipos de datos:
+
+Creación de una tabla PhpMyAdmin
+Acotaciones
+
+Si no quiere crear en forma manual la base de datos y la tabla, puede ejecutar el siguiente conjunto de comandos SQL:
+
+CREATE DATABASE `base1`;
+
+USE `base1`;
+
+CREATE TABLE `articulos` (
+  `codigo` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `descripcion` varchar(50) NOT NULL,
+  `precio` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+Debemos seleccionar la pestaña "SQL" de PhpMyAdmin y pegar el código anterior:
+
+Creación de una tabla PhpMyAdmin
+Retornar

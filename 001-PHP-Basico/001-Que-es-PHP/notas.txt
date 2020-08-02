@@ -1,0 +1,36 @@
+PHP (acrónimo de "PHP: Hypertext Preprocessor") es un lenguaje interpretado de alto nivel embebido en páginas HTML y ejecutado en el servidor.
+
+Hay que entender primero como funciona la solicitud de páginas en un navegador para comenzar a programar en PHP.
+
+Comunicación entre el cliente y el servidor sin PHP:
+1 - Tipeamos en la barra del navegador la dirección y el archivo a solicitar.
+
+2 - El web browser (navegador) envía el mensaje a través de Internet a la computadora, por ejemplo www.lanacion.com/pagina1.htm solicitando la página (archivo) pagina1.htm
+
+3 - El web server (servidor web, que puede ser el Apache, IIS, etc.) que es un programa que se ejecuta en la máquina www.lanacion.com, recibe el mensaje y lee el archivo solicitado desde el disco duro.
+
+4 - El servidor web envía el archivo solicitado por el navegador tal cual está en el disco duro.
+
+5 - El navegador muestra en pantalla el archivo que envió el servidor web.
+
+Este proceso siempre es el mismo cuando hablamos de páginas estáticas (páginas que no cambian), cualquiera sea el cliente que solicita la página el contenido siempre será el mismo.
+La única forma que el contenido del archivo cambie es que el administrador de ese sitio web edite el contenido del archivo pagina1.htm y haga modificaciones.
+
+Comunicación entre el cliente y el servidor con PHP:
+1 - Tipeamos en la barra del navegador la dirección y el archivo a solicitar.
+
+2 - El web browser (navegador) envía el mensaje a través de Internet a la computadora llamada www.lanacion.com solicitando la página (archivo) pagina1.php
+
+3 - El web server (servidor web, que puede ser el Apache, IIS, etc.), recibe el mensaje y al ver que la extension es "php" solicita al interprete de PHP (que es otro programa que se ejecuta en el servidor web) que le envíe el archivo.
+
+4 - El intérprete PHP lee desde el disco el archivo pagina1.php
+
+5 - El intérprete PHP ejecuta los comandos contenidos en el archivo y eventualmente se comunica con un gestor de base de datos (ejemplos de ellos pueden ser MySql, MariaDB, Oracle, Informix, SQL Server, etc.)
+
+6 - Luego de ejecutar el programa contenido en el archivo envía éste al servidor web.
+
+7 - El servidor web envía la página al cliente que la había solicitado.
+
+8 - El navegador muestra en pantalla el archivo que envió el servidor web.
+
+Para aquellas personas que conocen otros lenguajes de programación (C - Java - C# - Pascal etc.) la salida de los resultados normalmente es la pantalla, en PHP la salida es la página HTML (luego ésta viaja por internet y llega al cliente que la solicitó)

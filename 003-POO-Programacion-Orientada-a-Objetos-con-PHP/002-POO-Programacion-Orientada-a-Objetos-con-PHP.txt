@@ -1,0 +1,35 @@
+https://www.tutorialesprogramacionya.com/phpya/poo/
+POO (Programación Orientada a Objetos)
+con PHP
+Regresar al Tutorial principal 	
+
+Se presentan los conceptos de Clase, Objeto, Atributo, Método, Colaboración, Herencia etc.
+Puede probar los ejercicios en el sitio y ver los resultados inmediatamente.
+
+ 
+
+Orden
+del
+concepto	Concepto	Detalle
+del
+concepto	Problema
+resuelto	Problema
+a
+resolver
+1	Concepto de programación orientada a objetos (POO)	Descripción del tema		
+2	Declaración de una clase y creación de un objeto.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+3	Atributos de una clase.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+4	Métodos de una clase.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+5	Método constructor de una clase (__construct)	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+6	Llamada de métodos dentro de la clase.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+7	Modificadores de acceso a atributos y métodos (public - private)	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+8	Colaboración de objetos.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+9	Parámetros de tipo objeto.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+10	Parámetros opcionales.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+11	Herencia.	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+12	Modificadores de acceso a atributos y métodos (protected)	Descripción del tema	Ejercicio resuelto	Ejercicio por resolver
+Página:12
+
+
+
+Regresar al Tutorial principal

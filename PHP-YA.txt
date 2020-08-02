@@ -1,1 +1,4 @@
-PHP-YA.txt
+https://www.tutorialesprogramacionya.com/desarrollowebconphp/
+https://www.tutorialesprogramacionya.com/phpya/
+
+https://www.tutorialesprogramacionya.com/
